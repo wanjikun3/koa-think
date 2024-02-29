@@ -1,0 +1,32 @@
+{
+  "name": "koa-think",
+  "version": "1.0.0",
+  "description": "koa-think基于koa开发的mvc框架",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node ./test/app.js"
+  },
+  "keywords": [
+    "koa-think",
+    "koaThink",
+    "think",
+    "controller",
+    "autolaod",
+    "model",
+    "Service",
+    "logic"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wanjikun3/koa-think.git"
+  },
+  "homepage": "https://github.com/wanjikun3/koa-think#readme",
+  "author": "378599124@qq.com",
+  "license": "MIT",
+  "dependencies": {
+    "jsonwebtoken": "^9.0.2",
+    "koa": "^2.15.0",
+    "mongoose": "^8.2.0",
+    "sha1": "^1.1.1"
+  }
+}
