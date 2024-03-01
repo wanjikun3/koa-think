@@ -54,7 +54,6 @@ async function think(app,option = {}){
     app.context.model =(name)=>{
         return models[name]
     }
-   
     app.context.controllers =await load(config.root+'/'+config.controller)
     app.use( async function (ctx,next) {
         if(ctx.path==='/'){
