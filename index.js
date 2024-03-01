@@ -10,7 +10,6 @@ const { pathToFileURL } = require('node:url')
  * @returns {*[]}
  */
 async function load(dir){
-
     let files = fs.readdirSync(dir);
     let data = [];
     for (let file of files) {
