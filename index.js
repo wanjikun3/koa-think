@@ -56,7 +56,6 @@ async function think(app,option = {}){
     }
    
     app.context.controllers =await load(config.root+'/'+config.controller)
-
     app.use( async function (ctx,next) {
         if(ctx.path==='/'){
             ctx.path="/index"
