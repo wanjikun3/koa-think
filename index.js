@@ -10,7 +10,7 @@ const { pathToFileURL } = require('node:url')
  * @returns {*[]}
  */
 async function load(dir){
-    console.log(dir)
+
     let files = fs.readdirSync(dir);
     let data = [];
     for (let file of files) {
@@ -30,15 +30,7 @@ async function load(dir){
  * @param config  配置 { mongo: }
  * @returns {(function(*): Promise<void>)|*}
  */
-function think(app,option = {
-    root:process.cwd(),
-    controller:'controller',
-    model:'model',
-    uri:'mongodb://127.0.0.1:27017/test',
-    authKey:'koa-think',
-    authExpire:60*60*2,
-    authPath:['auth']
-}){
+async function think(app,option = {}){
     let defult={
         root:process.cwd(),
         controller:'controller',
@@ -46,7 +38,7 @@ function think(app,option = {
         uri:'mongodb://127.0.0.1:27017/test',
         authKey:'koa-think',
         authExpire:60*60*2,
-        authPath:['auth']
+        authPath:[]
     }
     let config={...defult,...option}
     app.context.config = config
@@ -54,8 +46,7 @@ function think(app,option = {
     mongoose.connect(config.uri).then(db=>{
         app.context.db=db
     });
-    let modelFile = load(config.root+'/'+config.model);
-
+    let modelFile = await load(config.root+'/'+config.model);
     let models=[];
     for (let file in modelFile) {
         let name=file.split('.')[0]
@@ -65,13 +56,18 @@ function think(app,option = {
         return models[name]
     }
    
-    app.context.controllers = load(config.root+'/'+config.controller)
-    app.use( async function (ctx,next) {
-        const paths = ctx.path.split('/');
-        const controller = paths[1] === '' ? 'index' : paths[1]
-        const controllers=ctx.controllers
+    app.context.controllers =await load(config.root+'/'+config.controller)
 
-        if(!config.authPath.some(key=> ctx.path.startsWith('/'+key)===true )){
+    app.use( async function (ctx,next) {
+        if(ctx.path==='/'){
+            ctx.path="/index"
+        }
+        const paths = ctx.path.split('/');
+        const controller = paths[1]
+        const controllers=ctx.controllers
+  
+        if(config.authPath.length>0 && !config.authPath.some(key=> ctx.path.startsWith('/'+key) === true )){
+            
             try{
                 ctx.user =await jwt.verify(ctx.request.header.authorization.split(' ')[1], config.authKey)
             }catch (e){
@@ -84,13 +80,15 @@ function think(app,option = {
             }
         }
         if (controllers.hasOwnProperty(controller)) {
+       
             let result = null
             if (paths.length === 2) {
-                if (controllers[controller].index) {
-                    result = await controllers[controller].index(ctx)
-                } else if (typeof (controllers['index']) === 'function') {
+                console.log(controllers,controller)
+                 if (typeof (controllers[controller]) === 'function') {
                     result = await controllers[controller](ctx)
-                }
+                }else if (controllers[controller].index) {
+                    result = await controllers[controller].index(ctx)
+                } 
             } else if (paths.length === 3 ) {
                 let action =paths[2]
                 if(controllers[controller].hasOwnProperty(action)){

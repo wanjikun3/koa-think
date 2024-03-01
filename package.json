@@ -1,20 +1,25 @@
 {
   "name": "koa-think",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "koa-think基于koa开发的mvc框架",
   "main": "index.js",
   "scripts": {
-    "dev": "node ./test/app.js"
+    "dev": "nodemon ./test/app.js"
   },
   "keywords": [
     "koa-think",
     "koaThink",
     "think",
+    "koa-mvc",
+    "mvc",
     "controller",
-    "autolaod",
     "model",
     "Service",
-    "logic"
+    "logic",
+    "autoload",
+    "laoder",
+    "node",
+    "framework"
   ],
   "repository": {
     "type": "git",
@@ -26,6 +31,7 @@
   "dependencies": {
     "jsonwebtoken": "^9.0.2",
     "koa": "^2.15.0",
+    "koa-body": "^6.0.1",
     "mongoose": "^8.2.0",
     "sha1": "^1.1.1"
   }

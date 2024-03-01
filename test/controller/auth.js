@@ -48,5 +48,8 @@ module.exports = {
         }catch (e){
             return {code:401,info:'刷新令牌验证失败'}
         }
+    },
+    index: async()=>{
+        return {code:0,info:'test'}
     }
 }
